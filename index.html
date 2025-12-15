@@ -3,48 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人主页</title>
+    <title>樊彧 | Fan Yu - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        :root {
+            --primary: #2563eb;
+            --secondary: #4f46e5;
+            --accent: #0ea5e9;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --bg-gradient: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
         }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            color: var(--text-main);
+            line-height: 1.6;
+            background: linear-gradient(-45deg, #f3f4f6, #e0e7ff, #dbeafe, #eff6ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        /* 背景流光动画 */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* 头部卡片 - 玻璃拟态 */
+        header {
             text-align: center;
-            max-width: 400px;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
         }
-        h1 { color: #333; }
-        p { color: #666; }
-        .btn {
+
+        /* --- 头像样式修改区域 --- */
+        .avatar-img {
+            width: 120px;  /* 稍微调大了一点，看着更大气 */
+            height: 120px;
+            border-radius: 16px; /* 16px 的圆角方形，现代感更强。如果想要纯直角，改为 0 */
+            margin: 0 auto 1.5rem;
+            display: block;
+            object-fit: cover; /* 关键属性：确保图片填满方框不变形 */
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25); /* 柔和的阴影 */
+            border: 3px solid rgba(255, 255, 255, 0.8); /* 增加一个白边框，更突出 */
+        }
+        /* --------------------- */
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .contact-links a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: var(--primary);
+        }
+
+        .contact-links i { margin-right: 8px; }
+
+        /* 内容区块 */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 15px;
+            color: var(--text-main);
+            opacity: 0; /* 初始隐藏，用于滚动动画 */
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 25px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* 关于我卡片 */
+        .about-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        /* 项目卡片 */
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 装饰性光条 */
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover::after {
+            opacity: 1;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-gold { background: #fef3c7; color: #d97706; }
+        .badge-blue { background: #dbeafe; color: #2563eb; }
+
+        .tech-tags {
+            margin: 1rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-tag {
+            font-family: 'Consolas', monospace;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-project {
             display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #2ea44f;
+            margin-top: 1rem;
+            padding: 8px 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
         }
-        .btn:hover { background-color: #2c974b; }
+
+        .btn-project:hover {
+            opacity: 0.9;
+        }
+
+        /* 列表样式优化 */
+        .contribution-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contribution-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: #4b5563;
+        }
+
+        .contribution-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* 动画类 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* 移动端微调 */
+        @media (max-width: 600px) {
+            .project-header { flex-direction: column; gap: 10px; }
+            h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>你好，我是 fanyuo 👋</h1>
-        <p>这是我在 GitHub 上的个人主页。</p>
-        <p>我是一名开发者 / 学生 / 技术爱好者。</p>
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-        <a href="https://github.com/fanyuo" class="btn">访问我的 GitHub 仓库</a>
+    <div class="container">
+        <header>
+            <img src="images/avatar.jpg" alt="樊彧的头像" class="avatar-img">
+            
+            <h1>樊 彧</h1>
+            <p class="subtitle">电气工程及其自动化 (本科) | 嵌入式 & 全栈开发者</p>
+            
+            <div class="contact-links">
+                <a href="mailto:fanyuovan@outlook.com">
+                    <i class="fas fa-envelope"></i> 邮件联系
+                </a>
+                <a href="https://github.com/fanyuo" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </header>
+
+        <section>
+            <h2 class="section-title">关于我</h2>
+            <div class="about-card">
+                <p>
+                    👋 你好！我是樊彧。作为一名<strong>电气工程及其自动化</strong>专业的学生，我不仅了解底层硬件控制，更热衷于构建完整的软件系统。
+                    <br><br>
+                    我的技术栈跨越了从 <strong>STM32/Jetson</strong> 的嵌入式开发到 <strong>Vue3/FastAPI</strong> 的现代全栈应用。我喜欢用代码解决实际工程问题，并不断探索技术的边界。
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">核心项目与竞赛</h2>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">智能救援机器人</div>
+                    <div class="badges">
+                        <span class="badge badge-gold"><i class="fas fa-trophy"></i> 全国二等奖 (2025)</span>
+                    </div>
+                </div>
+                
+                <p style="color: #64748b; font-size: 0.95rem;">全国大学生工程实践与创新能力大赛参赛作品</p>
+                
+                <div class="tech-tags">
+                    <span class="tech-tag">Jetson Nano</span>
+                    <span class="tech-tag">STM32</span>
+                    <span class="tech-tag">Python/C</span>
+                    <span class="tech-tag">YOLOv5</span>
+                </div>
+
+                <ul class="contribution-list">
+                    <li><strong>架构设计：</strong> 设计 Jetson (AI算力) + STM32 (实时控制) 的异构分布式架构。</li>
+                    <li><strong>视觉算法：</strong> 移植并优化 YOLOv5 模型至嵌入式端，实现救援目标实时检测。</li>
+                    <li><strong>全自主控制：</strong> 编写通信协议，实现从路径规划到机械臂抓取的全自主流程。</li>
+                </ul>
+
+                <a href="https://github.com/fanyuo/Intelligent-Rescue-2025" target="_blank" class="btn-project">
+                    <i class="fab fa-github"></i> 查看源码
+                </a>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-title">工程实践创新中心官网</div>
+                    <div class="badges">
+                        <span class="badge badge-blue">全栈独立开发</span>
+                    </div>
+                </div>
+
+                <p style="color: #64748b; font-size: 0.95rem;">为工作室设计并部署的官方门户网站</p>
+
+                <div class="tech-tags">
+                    <span class="tech-tag">Vue3</span>
+                    <span class="tech-tag">FastAPI</span>
+                    <span class="tech-tag">Nginx</span>
+                    <span class="tech-tag">Linux</span>
+                </div>
+
+                <ul class="contribution-list">
+                    <li><strong>前后端开发：</strong> 独立完成 Vue3 响应式前端与 FastAPI 高性能后端接口开发。</li>
+                    <li><strong>服务器运维：</strong> 配置 Nginx 反向代理，完成从域名解析到云服务器部署的全流程。</li>
+                </ul>
+
+                <a href="https://epic314.bucea.online/" target="_blank" class="btn-project">
+                    <i class="fas fa-globe"></i> 访问网站
+                </a>
+            </div>
+        </section>
     </div>
 
+    <footer>
+        <p>&copy; 2025 樊彧 (Fan Yu). Built with code & passion.</p>
+    </footer>
+
+    <script>
+        // 当页面滚动时，触发淡入效果
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // 只触发一次
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-title, .about-card, .project-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>
